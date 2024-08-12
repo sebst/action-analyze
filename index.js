@@ -35,6 +35,8 @@ try {
     const repo = core.getInput('repo');
     const run_id = core.getInput('run-id');
 
+    console.log(token, owner, repo, run_id);
+
 
     getJobsIfCompleted(token, owner, repo, run_id, GHA_JOB_NAME).then((jobs) => {
         console.log(jobs);
