@@ -47020,6 +47020,8 @@ async function getJobsIfCompleted(token, owner, repo, run_id, job_name, i) {
     console.log(".......");
     for (const job of runningJobs) {
       console.log(job.name, job.status);
+      console.log("job_name", job_name);
+      console.log("job_name === job.name", job_name === job.name);
     }
     console.log(".......");
     console.log("___________________________________________________");
