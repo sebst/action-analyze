@@ -1,7 +1,7 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
 const { Octokit } = require("octokit");
-const artifact = require("@actions/artifact");
+const {DefaultArtifactClient} = require('@actions/artifact')
 
 async function getJobsIfCompleted(
   token,
@@ -76,15 +76,15 @@ try {
 
       // save JSON output of `jobs` to a file called `jobs.json`
       const fs = require("fs");
+      const artifact = new DefaultArtifactClient();
       fs.writeFileSync("jobs.json", JSON.stringify(jobs, null, 2));
 
-      const artifactClient = artifact.create();
       const artifactName = "jobs-artifact";
       const files = ["jobs.json"];
       const rootDirectory = ".";
       const options = {};
 
-      artifactClient.uploadArtifact(artifactName, files, rootDirectory, options).then((response) => {
+      artifact.uploadArtifact(artifactName, files, rootDirectory, options).then((response) => {
         console.log(response);
         core.setOutput("jobs-artifact-id", response.artifactItems[0]);
       });
