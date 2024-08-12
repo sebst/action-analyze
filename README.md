@@ -50,7 +50,7 @@ jobs:
   analyze_job:
     runs-on: ubuntu-latest
     steps:
-      - uses: sebst/action-analyze@v1.21
+      - uses: sebst/action-analyze@v2
         with:
           github-token: ${{ secrets.GHA_PAT }}
           repo: ${{ github.repository }}
