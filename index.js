@@ -78,15 +78,16 @@ try {
       const fs = require("fs");
       fs.writeFileSync("jobs.json", JSON.stringify(jobs, null, 2));
 
-      const uploadResponse = artifact
-        .uploadArtifact("jobs.json", "jobs.json", ".", {})
-        .then((response) => {
-          console.log(response);
-          core.setOutput("jobs-artifact-id", response.id);
-        //   const repository = github.context.repo;
-        //   const artifactURL = `${github.context.serverUrl}/${repository.owner}/${repository.repo}/actions/runs/${github.context.runId}/artifacts/${uploadResponse.id}`;
-        //   core.setOutput("jobs-artifact-id", response.id);
-        });
+      const artifactClient = artifact.create();
+      const artifactName = "jobs-artifact";
+      const files = ["jobs.json"];
+      const rootDirectory = ".";
+      const options = {};
+
+      artifactClient.uploadArtifact(artifactName, files, rootDirectory, options).then((response) => {
+        console.log(response);
+        core.setOutput("jobs-artifact-id", response.artifactItems[0]);
+      });
     }
   );
 
