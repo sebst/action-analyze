@@ -47017,7 +47017,11 @@ async function getJobsIfCompleted(token, owner, repo, run_id, job_name, i) {
   } else {
     // wait for 5 seconds and check again
     console.log("Waiting for jobs to complete...", i);
-    console.log(runningJobs);
+    console.log(".......");
+    for (const job of runningJobs) {
+      console.log(job.name, job.status);
+    }
+    console.log(".......");
     console.log("___________________________________________________");
     await new Promise((resolve) => setTimeout(resolve, 5000));
     return await getJobsIfCompleted(
@@ -47049,7 +47053,6 @@ try {
 
   const time = new Date().toTimeString();
   core.setOutput("time", time);
-
 } catch (error) {
   core.setFailed(error.message);
 }
