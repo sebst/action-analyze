@@ -31101,7 +31101,7 @@ async function getJobsIfCompleted(token, owner, repo, run_id, job_name) {
         run_id: run_id,
     });
 
-    const runningJobs = jobs.data.jobs.filter((job) => job.name !== GHA_JOB_NAME);
+    const runningJobs = jobs.data.jobs.filter((job) => job.name !== job_name);
     const allJobsCompleted = runningJobs.every((job) => job.status === "completed");
 
     if (allJobsCompleted) {
