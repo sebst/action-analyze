@@ -1,10 +1,30 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
 const { Octokit } = require("octokit");
+const artifact = require("@actions/artifact");
 
-async function getJobsIfCompleted(token, owner, repo, run_id, job_id, i, max_runs) {
+async function getJobsIfCompleted(
+  token,
+  owner,
+  repo,
+  run_id,
+  job_id,
+  i,
+  max_runs
+) {
   console.log("Inside getJobsIfCompleted");
-  console.log("token", token, "owner", owner, "repo", repo, "run_id", run_id, "job_id", job_id);
+  console.log(
+    "token",
+    token,
+    "owner",
+    owner,
+    "repo",
+    repo,
+    "run_id",
+    run_id,
+    "job_id",
+    job_id
+  );
   console.log("Doing the job now");
   const octokit = await new Octokit({
     auth: token,
@@ -50,9 +70,25 @@ try {
   console.log("Inputs: ");
   console.log(token, owner, repo, runId, jobId, 1);
 
-  getJobsIfCompleted(token, owner, repo, runId, jobId, 1, max_runs).then((jobs) => {
-    console.log(jobs);
-  });
+  getJobsIfCompleted(token, owner, repo, runId, jobId, 1, max_runs).then(
+    (jobs) => {
+      console.log(jobs);
+
+      // save JSON output of `jobs` to a file called `jobs.json`
+      const fs = require("fs");
+      fs.writeFileSync("jobs.json", JSON.stringify(jobs, null, 2));
+
+      const uploadResponse = artifact
+        .uploadArtifact("jobs.json", "jobs.json", ".", {})
+        .then((response) => {
+          console.log(response);
+          core.setOutput("jobs-artifact-id", response.id);
+        //   const repository = github.context.repo;
+        //   const artifactURL = `${github.context.serverUrl}/${repository.owner}/${repository.repo}/actions/runs/${github.context.runId}/artifacts/${uploadResponse.id}`;
+        //   core.setOutput("jobs-artifact-id", response.id);
+        });
+    }
+  );
 
   const time = new Date().toTimeString();
   core.setOutput("time", time);
