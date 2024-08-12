@@ -47023,7 +47023,7 @@ try {
 
     const token = core.getInput('github-token');
     const owner = core.getInput('owner');
-    const repo = core.getInput('repo');
+    const repo = core.getInput('repo').split("/")[1];
     const run_id = core.getInput('workflow-id');
     const jobName = core.getInput('job-name');
 
