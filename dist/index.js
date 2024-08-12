@@ -47027,10 +47027,13 @@ async function getJobsIfCompleted(token, owner, repo, run_id, job_id, i) {
     // console.log("___________________________________________________");
 
     for (const job of runningJobs) {
+        console.log("...........................", i);
         console.log("job.labels", job.labels);
         console.log("job.name", job.name);
         console.log("job.id", job.id);
         console.log("job.workflow_name", job.workflow_name);
+        console.log("job_id", job_id);
+        console.log("...........................");
     }
 
     await new Promise((resolve) => setTimeout(resolve, 5000));
