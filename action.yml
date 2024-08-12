@@ -17,6 +17,9 @@ inputs:
   workflow-id:
     description: 'Workflow ID'
     required: true
+  job-name:
+    description: 'Job name'
+    required: true
 outputs:
   time: # id of output
     description: 'The time we greeted you'

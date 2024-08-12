@@ -47025,11 +47025,12 @@ try {
     const owner = core.getInput('owner');
     const repo = core.getInput('repo');
     const run_id = core.getInput('workflow-id');
+    const jobName = core.getInput('job-name');
 
     console.log(token, owner, repo, run_id);
 
 
-    getJobsIfCompleted(token, owner, repo, run_id, GHA_JOB_NAME).then((jobs) => {
+    getJobsIfCompleted(token, owner, repo, run_id, jobName).then((jobs) => {
         console.log(jobs);
     });
 
