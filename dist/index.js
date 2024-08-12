@@ -47022,26 +47022,30 @@ try {
   // `who-to-greet` input defined in action metadata file
 
     const token = core.getInput('github-token');
-    const owner = core.getInput('owner');
+    const owner = core.getInput('repo').split("/")[0];
     const repo = core.getInput('repo').split("/")[1];
     const run_id = core.getInput('workflow-id');
     const jobName = core.getInput('job-name');
 
+    console.log("Inputs: ");
     console.log(token, owner, repo, run_id);
 
 
-    getJobsIfCompleted(token, owner, repo, run_id, jobName).then((jobs) => {
-        console.log(jobs);
-    });
 
 
   const nameToGreet = core.getInput('who-to-greet');
   console.log(`Hello ${nameToGreet}!`);
+
+//   getJobsIfCompleted(token, owner, repo, run_id, jobName).then((jobs) => {
+//     console.log(jobs);
+// });
+
+
   const time = (new Date()).toTimeString();
   core.setOutput("time", time);
   // Get the JSON webhook payload for the event that triggered the workflow
   const payload = JSON.stringify(github.context.payload, undefined, 2)
-  console.log(`The event payload: ${payload}`);
+//   console.log(`The event payload: ${payload}`);
 } catch (error) {
   core.setFailed(error.message);
 }
