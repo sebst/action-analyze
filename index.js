@@ -27,7 +27,7 @@ async function getJobsIfCompleted(token, owner, repo, run_id, job_name) {
     // wait for 5 seconds and check again
     console.log("Waiting for jobs to complete...");
     await new Promise((resolve) => setTimeout(resolve, 5000));
-    const next = await getJobsIfCompleted();
+    const next = await getJobsIfCompleted(token, owner, repo, run_id, job_name);
     return next;
   }
 }
