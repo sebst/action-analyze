@@ -47019,9 +47019,9 @@ async function getJobsIfCompleted(token, owner, repo, run_id, job_id, i) {
     console.log("Waiting for jobs to complete...", i);
     console.log(".......");
     for (const job of runningJobs) {
-      console.log(job.name, job.status);
-      console.log("job_name", job_id);
-      console.log("job_name === job.name", job_id === job.name);
+      console.log(job.id, job.status, job.name);
+      console.log("job_id", job_id);
+      console.log("job_id === job.name", job_id === job.id);
     }
     console.log(".......");
     console.log("___________________________________________________");
