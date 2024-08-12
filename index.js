@@ -5,31 +5,31 @@ const { Octokit } = require("octokit");
 async function getJobsIfCompleted(token, owner, repo, run_id, job_name) {
     console.log("Inside getJobsIfCompleted");
     console.log(token, owner, repo, run_id, job_name);
-    console.log("Exiting getJobsIfCompleted");
-//   const octokit = await new Octokit({
-//     auth: token,
-//   });
+    console.log("Doing the job now");
+  const octokit = await new Octokit({
+    auth: token,
+  });
 
-//   const jobs = await octokit.rest.actions.listJobsForWorkflowRun({
-//     owner: owner,
-//     repo: repo,
-//     run_id: run_id,
-//   });
+  const jobs = await octokit.rest.actions.listJobsForWorkflowRun({
+    owner: owner,
+    repo: repo,
+    run_id: run_id,
+  });
 
-//   const runningJobs = jobs.data.jobs.filter((job) => job.name !== job_name);
-//   const allJobsCompleted = runningJobs.every(
-//     (job) => job.status === "completed"
-//   );
+  const runningJobs = jobs.data.jobs.filter((job) => job.name !== job_name);
+  const allJobsCompleted = runningJobs.every(
+    (job) => job.status === "completed"
+  );
 
-//   if (allJobsCompleted) {
-//     return runningJobs;
-//   } else {
-//     // wait for 5 seconds and check again
-//     console.log("Waiting for jobs to complete...");
-//     await new Promise((resolve) => setTimeout(resolve, 5000));
-//     const next = await getJobsIfCompleted();
-//     return next;
-//   }
+  if (allJobsCompleted) {
+    return runningJobs;
+  } else {
+    // wait for 5 seconds and check again
+    console.log("Waiting for jobs to complete...");
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    const next = await getJobsIfCompleted();
+    return next;
+  }
 }
 
 try {
