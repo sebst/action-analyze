@@ -5,6 +5,18 @@ inputs:
     description: 'Who to greet'
     required: true
     default: 'World'
+  github-token:
+    description: 'Token to use for GitHub API'
+    required: true
+  owner:
+    description: 'Owner of the repository'
+    required: true
+  repo:
+    description: 'Repository name'
+    required: true
+  workflow-id:
+    description: 'Workflow ID'
+    required: true
 outputs:
   time: # id of output
     description: 'The time we greeted you'
