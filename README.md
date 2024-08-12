@@ -1,12 +1,29 @@
-# Hello world javascript action
+# Workflow Analyze Action
 
-This action prints "Hello World" or "Hello" + the name of a person to greet to the log.
+This Action collects the stats of a workflow and the logs for each step.
+
+> [!TIP]
+> Learn more about why this is helpful on the [blog post](https://bas.surf/action-analyze).
 
 ## Inputs
 
-### `who-to-greet`
 
-**Required** The name of the person to greet. Default `"World"`.
+### `github-token`
+
+**Required** Desc. of the input
+
+### `repo`
+
+**Required** Desc. of the input
+
+### `workflow-id`
+
+**Required** Desc. of the input
+
+### `job-id`
+
+**Required** Desc. of the input
+
 
 ## Outputs
 
@@ -16,8 +33,27 @@ The time we greeted you.
 
 ## Example usage
 
+> [!CAUTION]
+> Do not assign a name to the job that uses this action. The action will run infinitely if you do.
+
+
 ```yaml
-uses: actions/hello-world-javascript-action@e76147da8e5c81eaf017dede5645551d4b94427b
-with:
-  who-to-greet: 'Mona the Octocat'
+on:
+  workflow_dispatch:
+
+jobs:
+  run_the_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sleep 20
+        run: sleep 20
+  analyze_job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: sebst/action-analyze@v1.21
+        with:
+          github-token: ${{ secrets.GHA_PAT }}
+          repo: ${{ github.repository }}
+          workflow-id: ${{ github.run_id }}
+          job-id: ${{ github.job }}
 ```
