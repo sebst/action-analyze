@@ -46993,9 +46993,9 @@ const core = __nccwpck_require__(8838);
 const github = __nccwpck_require__(3073);
 const { Octokit } = __nccwpck_require__(5152);
 
-async function getJobsIfCompleted(token, owner, repo, run_id, job_name, i) {
+async function getJobsIfCompleted(token, owner, repo, run_id, job_id, i) {
   console.log("Inside getJobsIfCompleted");
-  console.log(token, owner, repo, run_id, job_name);
+  console.log(token, owner, repo, run_id, job_id);
   console.log("Doing the job now");
   const octokit = await new Octokit({
     auth: token,
@@ -47007,7 +47007,7 @@ async function getJobsIfCompleted(token, owner, repo, run_id, job_name, i) {
     run_id: run_id,
   });
 
-  const runningJobs = jobs.data.jobs.filter((job) => job.name !== job_name);
+  const runningJobs = jobs.data.jobs.filter((job) => job.id !== job_id);
   const allJobsCompleted = runningJobs.every(
     (job) => job.status === "completed"
   );
@@ -47020,8 +47020,8 @@ async function getJobsIfCompleted(token, owner, repo, run_id, job_name, i) {
     console.log(".......");
     for (const job of runningJobs) {
       console.log(job.name, job.status);
-      console.log("job_name", job_name);
-      console.log("job_name === job.name", job_name === job.name);
+      console.log("job_name", job_id);
+      console.log("job_name === job.name", job_id === job.name);
     }
     console.log(".......");
     console.log("___________________________________________________");
@@ -47031,7 +47031,7 @@ async function getJobsIfCompleted(token, owner, repo, run_id, job_name, i) {
       owner,
       repo,
       run_id,
-      job_name,
+      job_id,
       i + 1
     );
   }
@@ -47044,12 +47044,12 @@ try {
   const owner = core.getInput("repo").split("/")[0];
   const repo = core.getInput("repo").split("/")[1];
   const runId = core.getInput("workflow-id");
-  const jobName = core.getInput("job-name");
+  const jobId = core.getInput("job-id");
 
   console.log("Inputs: ");
-  console.log(token, owner, repo, runId, jobName, 1);
+  console.log(token, owner, repo, runId, jobId, 1);
 
-  getJobsIfCompleted(token, owner, repo, runId, jobName, 1).then((jobs) => {
+  getJobsIfCompleted(token, owner, repo, runId, jobId, 1).then((jobs) => {
     console.log(jobs);
   });
 

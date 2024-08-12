@@ -10,8 +10,8 @@ inputs:
   workflow-id:
     description: 'Workflow ID'
     required: true
-  job-name:
-    description: 'Job name'
+  job-id:
+    description: 'Job ID'
     required: true
 outputs:
   time: # id of output
