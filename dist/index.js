@@ -46995,7 +46995,7 @@ const { Octokit } = __nccwpck_require__(5152);
 
 async function getJobsIfCompleted(token, owner, repo, run_id, job_id, i) {
   console.log("Inside getJobsIfCompleted");
-  console.log(token, owner, repo, run_id, job_id);
+  console.log("token", token, "owner", owner, "repo", repo, "run_id", run_id, "job_id", job_id);
   console.log("Doing the job now");
   const octokit = await new Octokit({
     auth: token,
@@ -47015,16 +47015,24 @@ async function getJobsIfCompleted(token, owner, repo, run_id, job_id, i) {
   if (allJobsCompleted || i > 10) {
     return runningJobs;
   } else {
-    // wait for 5 seconds and check again
-    console.log("Waiting for jobs to complete...", i);
-    console.log(".......");
+    // // wait for 5 seconds and check again
+    // console.log("Waiting for jobs to complete...", i);
+    // console.log(".......");
+    // for (const job of runningJobs) {
+    //   console.log(job.id, job.status, job.name);
+    //   console.log("job_id", job_id);
+    //   console.log("job_id === job.name", job_id === job.name);
+    // }
+    // console.log(".......");
+    // console.log("___________________________________________________");
+
     for (const job of runningJobs) {
-      console.log(job.id, job.status, job.name);
-      console.log("job_id", job_id);
-      console.log("job_id === job.name", job_id === job.name);
+        console.log("job.labels", job.labels);
+        console.log("job.name", job.name);
+        console.log("job.id", job.id);
+        console.log("job.workflow_name", job.workflow_name);
     }
-    console.log(".......");
-    console.log("___________________________________________________");
+
     await new Promise((resolve) => setTimeout(resolve, 5000));
     return await getJobsIfCompleted(
       token,
