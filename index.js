@@ -2,7 +2,7 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 const { Octokit } = require("octokit");
 
-async function getJobsIfCompleted(token, owner, repo, run_id, job_id, i) {
+async function getJobsIfCompleted(token, owner, repo, run_id, job_id, i, max_runs) {
   console.log("Inside getJobsIfCompleted");
   console.log("token", token, "owner", owner, "repo", repo, "run_id", run_id, "job_id", job_id);
   console.log("Doing the job now");
@@ -21,30 +21,9 @@ async function getJobsIfCompleted(token, owner, repo, run_id, job_id, i) {
     (job) => job.status === "completed"
   );
 
-  if (allJobsCompleted || i > 10) {
+  if (allJobsCompleted || i > max_runs) {
     return runningJobs;
   } else {
-    // // wait for 5 seconds and check again
-    // console.log("Waiting for jobs to complete...", i);
-    // console.log(".......");
-    // for (const job of runningJobs) {
-    //   console.log(job.id, job.status, job.name);
-    //   console.log("job_id", job_id);
-    //   console.log("job_id === job.name", job_id === job.name);
-    // }
-    // console.log(".......");
-    // console.log("___________________________________________________");
-
-    for (const job of runningJobs) {
-        console.log("...........................", i);
-        console.log("job.labels", job.labels);
-        console.log("job.name", job.name);
-        console.log("job.id", job.id);
-        console.log("job.workflow_name", job.workflow_name);
-        console.log("job_id", job_id);
-        console.log("...........................");
-    }
-
     await new Promise((resolve) => setTimeout(resolve, 5000));
     return await getJobsIfCompleted(
       token,
@@ -52,7 +31,8 @@ async function getJobsIfCompleted(token, owner, repo, run_id, job_id, i) {
       repo,
       run_id,
       job_id,
-      i + 1
+      i + 1,
+      max_runs
     );
   }
 }
@@ -65,11 +45,12 @@ try {
   const repo = core.getInput("repo").split("/")[1];
   const runId = core.getInput("workflow-id");
   const jobId = core.getInput("job-id");
+  const max_runs = Infinity;
 
   console.log("Inputs: ");
   console.log(token, owner, repo, runId, jobId, 1);
 
-  getJobsIfCompleted(token, owner, repo, runId, jobId, 1).then((jobs) => {
+  getJobsIfCompleted(token, owner, repo, runId, jobId, 1, max_runs).then((jobs) => {
     console.log(jobs);
   });
 
