@@ -86,7 +86,7 @@ try {
 
       artifact.uploadArtifact(artifactName, files, rootDirectory, options).then((response) => {
         console.log(response);
-        core.setOutput("jobs-artifact-id", response.artifactItems[0]);
+        core.setOutput("jobs-artifact-id", response.id);
       });
     }
   );
