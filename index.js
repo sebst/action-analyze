@@ -1,6 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-const Octokit = require("@octokit/rest").Octokit;
+const {Octokit} = require("octokit")
 
 async function getJobsIfCompleted(token, owner, repo, run_id, job_name) {
     const octokit = await new Octokit({
@@ -33,7 +33,7 @@ try {
     const token = core.getInput('github-token');
     const owner = core.getInput('owner');
     const repo = core.getInput('repo');
-    const run_id = core.getInput('run-id');
+    const run_id = core.getInput('workflow-id');
 
     console.log(token, owner, repo, run_id);
 
