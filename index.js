@@ -2,10 +2,10 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 const { Octokit } = require("octokit");
 
-async function getJobsIfCompleted(token, owner, repo, run_id, job_name) {
-    console.log("Inside getJobsIfCompleted");
-    console.log(token, owner, repo, run_id, job_name);
-    console.log("Doing the job now");
+async function getJobsIfCompleted(token, owner, repo, run_id, job_name, i) {
+  console.log("Inside getJobsIfCompleted");
+  console.log(token, owner, repo, run_id, job_name);
+  console.log("Doing the job now");
   const octokit = await new Octokit({
     auth: token,
   });
@@ -21,14 +21,22 @@ async function getJobsIfCompleted(token, owner, repo, run_id, job_name) {
     (job) => job.status === "completed"
   );
 
-  if (allJobsCompleted) {
+  if (allJobsCompleted || i > 10) {
     return runningJobs;
   } else {
     // wait for 5 seconds and check again
-    console.log("Waiting for jobs to complete...");
+    console.log("Waiting for jobs to complete...", i);
+    console.log(runningJobs);
+    console.log("___________________________________________________");
     await new Promise((resolve) => setTimeout(resolve, 5000));
-    const next = await getJobsIfCompleted(token, owner, repo, run_id, job_name);
-    return next;
+    return await getJobsIfCompleted(
+      token,
+      owner,
+      repo,
+      run_id,
+      job_name,
+      i + 1
+    );
   }
 }
 
@@ -42,20 +50,15 @@ try {
   const jobName = core.getInput("job-name");
 
   console.log("Inputs: ");
-  console.log(token, owner, repo, runId, jobName);
+  console.log(token, owner, repo, runId, jobName, 1);
 
-  const nameToGreet = core.getInput("who-to-greet");
-  console.log(`Hello ${nameToGreet}!`);
-
-  getJobsIfCompleted(token, owner, repo, runId, jobName).then((jobs) => {
+  getJobsIfCompleted(token, owner, repo, runId, jobName, 1).then((jobs) => {
     console.log(jobs);
   });
 
   const time = new Date().toTimeString();
   core.setOutput("time", time);
-  // Get the JSON webhook payload for the event that triggered the workflow
-  const payload = JSON.stringify(github.context.payload, undefined, 2);
-  //   console.log(`The event payload: ${payload}`);
+
 } catch (error) {
   core.setFailed(error.message);
 }
