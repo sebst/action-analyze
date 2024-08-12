@@ -47007,7 +47007,7 @@ async function getJobsIfCompleted(token, owner, repo, run_id, job_id, i) {
     run_id: run_id,
   });
 
-  const runningJobs = jobs.data.jobs.filter((job) => job.name !== job_id);
+  const runningJobs = jobs.data.jobs.filter((job) => job.id !== job_id);
   const allJobsCompleted = runningJobs.every(
     (job) => job.status === "completed"
   );
