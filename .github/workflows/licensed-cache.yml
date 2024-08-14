@@ -18,7 +18,7 @@ jobs:
           sudo tar -xzf licensed.tar.gz
           sudo mv licensed /usr/local/bin/licensed
       - run: |
-          cd /home/runner/work/template-github-action-typescript/template-github-action-typescript
+          cd /home/runner/work/action-analyze/action-analyze
           pwd
           licensed cache
           git status
