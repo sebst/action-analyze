@@ -1,0 +1,15 @@
+name: 'template-github-action-typescript'
+description: 'Description of template-github-action-typescript'
+author: 'Bas Steins'
+inputs:
+  who-to-greet:  # id of input
+    description: 'Name of the person to greet'
+    default: 'World'
+    required: true
+
+outputs:
+  greeting:  # id of output
+    description: The final greeting message produced by the action
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

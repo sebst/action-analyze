@@ -1,0 +1,34 @@
+name: Licensed-cache
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Check licenses
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: pwd
+      - name: Install licensed
+        run: |
+          cd $RUNNER_TEMP
+          curl -Lfs -o licensed.tar.gz https://github.com/github/licensed/releases/download/2.12.2/licensed-2.12.2-linux-x64.tar.gz
+          sudo tar -xzf licensed.tar.gz
+          sudo mv licensed /usr/local/bin/licensed
+      - run: |
+          cd /home/runner/work/template-github-action-typescript/template-github-action-typescript
+          pwd
+          licensed cache
+          git status
+      - name: config user name  
+        run: git config --global user.name "sebst" 
+      - name: config user email 
+        run: git config --global user.email "sebst@users.noreply.github.com"
+      - name: git add .licenses/
+        run: git add -f .licenses/
+      - name: git commit   
+        run: git commit -a -m "Update Licenses"
+      - name: git push   
+        run: git push

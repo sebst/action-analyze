@@ -1,7 +1,7 @@
 const core = require("@actions/core");
-const github = require("@actions/github");
+// const github = require("@actions/github");
 const { Octokit } = require("octokit");
-const {DefaultArtifactClient} = require('@actions/artifact')
+const { DefaultArtifactClient } = require("@actions/artifact");
 
 async function getJobsIfCompleted(
   token,
@@ -12,20 +12,6 @@ async function getJobsIfCompleted(
   i,
   max_runs
 ) {
-  console.log("Inside getJobsIfCompleted");
-  console.log(
-    "token",
-    token,
-    "owner",
-    owner,
-    "repo",
-    repo,
-    "run_id",
-    run_id,
-    "job_id",
-    job_id
-  );
-  console.log("Doing the job now");
   const octokit = await new Octokit({
     auth: token,
   });
@@ -67,13 +53,8 @@ try {
   const jobId = core.getInput("job-id");
   const max_runs = Infinity;
 
-  console.log("Inputs: ");
-  console.log(token, owner, repo, runId, jobId, 1);
-
   getJobsIfCompleted(token, owner, repo, runId, jobId, 1, max_runs).then(
     (jobs) => {
-      console.log(jobs);
-
       // save JSON output of `jobs` to a file called `jobs.json`
       const fs = require("fs");
       const artifact = new DefaultArtifactClient();
@@ -84,10 +65,35 @@ try {
       const rootDirectory = ".";
       const options = {};
 
-      artifact.uploadArtifact(artifactName, files, rootDirectory, options).then((response) => {
-        console.log(response);
-        core.setOutput("jobs-artifact-id", response.id);
-      });
+      artifact
+        .uploadArtifact(artifactName, files, rootDirectory, options)
+        .then((response) => {
+          core.setOutput("jobs-artifact-id", response.id);
+        });
+
+        // Remove "jobs.json" file
+        fs.unlinkSync("jobs.json");
+
+        // Get the logs
+        // downloadJobLogsForWorkflowRun
+        // const octokit = new Octokit({ auth: token });
+        // for (let job of jobs) {
+        //   octokit.rest.actions.downloadJobLogs({
+        //     owner: owner,
+        //     repo: repo,
+        //     job_id: job.id,
+        //     archive_format: "zip",
+        //   });
+        const octokit = new Octokit({ auth: token });
+        for (let job of jobs) {
+            /* Gets a redirect URL to download a plain text file of logs for a workflow job. This link expires after 1 minute. Look for Location: in the response header to find the URL for the download. */
+          octokit.rest.actions.downloadJobLogsForWorkflowRun({
+            owner: owner,
+            repo: repo,
+            job_id: job.id,
+            archive_format: "zip",
+          });
+
     }
   );
 
