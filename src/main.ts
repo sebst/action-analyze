@@ -12,6 +12,7 @@ async function getJobsIfCompleted(
   i,
   max_runs
 ) {
+  console.log('getJobsIfCompleted started')
   const octokit = await new Octokit({
     auth: token
   })
@@ -28,6 +29,8 @@ async function getJobsIfCompleted(
   if (allJobsCompleted || i > max_runs) {
     return runningJobs
   } else {
+    console.log('Waiting for jobs to complete...')
+    // wait for 5 seconds
     await new Promise(resolve => setTimeout(resolve, 5000))
     return await getJobsIfCompleted(
       token,
