@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
 // import * as github from '@actions/github'
-import {Octokit} from '@octokit/rest'
+import {Octokit} from 'octokit'
 import {DefaultArtifactClient} from '@actions/artifact'
 
 async function getJobsIfCompleted(
