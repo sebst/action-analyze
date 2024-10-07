@@ -20,7 +20,7 @@
   "author": "Bas Steins",
   "license": "MIT",
   "dependencies": {
-    "@actions/artifact": "^2.1.9",
+    "@actions/artifact": "^2.1.10",
     "@actions/core": "^1.11.1",
     "@actions/github": "^6.0.0",
     "@octokit/rest": "^21.0.2",
